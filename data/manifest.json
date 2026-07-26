@@ -1,0 +1,45 @@
+{
+  "created_at_utc": "2026-07-19T15:35:45Z",
+  "source": "Moscow Exchange ISS",
+  "base_url": "https://iss.moex.com/iss",
+  "requested_start": "2022-07-01",
+  "requested_end": "2026-07-17",
+  "rows": {
+    "contracts": 22,
+    "futures_daily": 6042,
+    "spot_daily": 1030,
+    "funding_daily": 6445,
+    "contract_daily": 6042,
+    "nearby_daily": 1030
+  },
+  "coverage": {
+    "futures_min": "2022-07-01",
+    "futures_max": "2026-07-17",
+    "spot_min": "2022-07-01",
+    "spot_max": "2026-07-17",
+    "funding_min": "2022-07-01",
+    "funding_max": "2026-07-17"
+  },
+  "processed_missing": {
+    "spot_price": 0,
+    "rub_rate": 0,
+    "cny_rate": 162,
+    "theoretical_futures_price": 162
+  },
+  "rate_asof_tolerance_calendar_days": 14,
+  "quality": {
+    "panel_duplicate_contract_dates": 0,
+    "nearby_duplicate_dates": 0,
+    "nonpositive_futures_prices": 0,
+    "nonpositive_spot_prices": 0,
+    "negative_days_to_maturity": 0,
+    "nearby_series_starts": 17,
+    "nearby_roll_transitions": 16,
+    "nearby_distinct_contracts": 17,
+    "basis_pct_quantiles": {
+      "p01": -12.332842834046335,
+      "median": -1.8356920702969564,
+      "p99": 13.010237604733701
+    }
+  }
+}
