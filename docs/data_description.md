@@ -8,7 +8,6 @@ The collected data form a reproducible public-source panel for analysing CNY/RUB
 
 | Aspect | Description |
 |---|---|
-| Research purpose | Examine CNY/RUB spot and futures pricing, cost of carry, market activity, option-implied risk, and changes surrounding the June 2024 sanctions event. |
 | Official sources | Moscow Exchange (MOEX); Bank of Russia; China Foreign Exchange Trade System (CFETS/ChinaMoney); People's Bank of China (PBOC). |
 | Main empirical window | 1 July 2022--28 July 2026; MOEX futures and spot observations end on 27 July 2026 where 28 July was not yet a trading-data date. |
 | Extended histories | Five-pair spot panel from January 2013; USD/RUB and EUR/RUB futures benchmark from 2009 through 2021. |
