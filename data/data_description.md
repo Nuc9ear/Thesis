@@ -12,7 +12,7 @@
 | Daily futures options | 1,648,342 in-scope rows; 2022-06-20--2026-08-03 | Balanced calls and puts on CNY/RUB futures. Exact underlying, strike, expiries, OHLC, settlement, VWAP, activity, Black--76 IV/Greeks, moneyness, parity residual, and rejection flags. |
 | Valid option observations | 1,554,863 rows | Observations satisfying maturity, price, underlying, bounds, and IV-solver rules. The 93,479 rejected rows remain separate and explained. |
 | Volatility-surface summaries | 9,690 underlying-expiry-days; through 2026-07-17 | Nearest observed ATM, 25-delta call/put, 10-delta call/put, risk reversals, butterflies, and actual supporting-observation counts. |
-| Funding curve | 5,128 calendar/trading dates; 2009-01-11-2026-08-04 | Backward-as-of Russian and Chinese market, repo, policy, and published lending benchmarks with source dates and staleness. |
+| Funding curve | 5,128 calendar/trading dates; 2009-01-11--2026-08-04 | Backward-as-of Russian and Chinese market, repo, policy, and published lending benchmarks with source dates and staleness. |
 | Pressure, market share, regimes | 9,885 pressure rows; 14,363 pair-share rows; 5,128 regime dates | Activity/price proxies, three-pair shares, and event indicators used for before/after comparisons. |
 
 ### Table 2. Official sources and collected fields
