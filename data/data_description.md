@@ -20,10 +20,6 @@ Exchange-rate changes can be measured from daily spot and futures prices using l
 
 Yes. `open_interest_contracts` and `open_interest_value_rub` are available by futures `SECID` and trading date. Open interest is a stock of outstanding positions, whereas `volume_contracts` is the number of contracts traded during the day.
 
-## 5. Which indicators can be used to measure market pressure?
-
-Available proxies include futures price change times volume, log return times volume, $\operatorname{sign}(r_t)\times\Delta OI_t$, volume/open interest, turnover/open-interest value, rolling abnormal-volume and abnormal-open-interest z-scores, Amihud illiquidity, spot return times trade count, bid--ask spread where available, and currency-pair activity shares. These are aggregate proxies, not directly observed signed order flow.
-
 ## 6. Are CNY vanilla put and call option data available?
 
 Yes. The futures-option panel contains 1,648,342 daily observations: 824,171 calls and 824,171 puts, covering 30,328 option SECIDs from 2022-06-20 to 2026-08-03. Prices, strikes, expirations, volume, turnover, trades, and open interest are included.
