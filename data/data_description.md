@@ -72,7 +72,7 @@ The spot-market dataset contains daily trading information published by the Mosc
 
 The spot prices are expressed as the number of Russian rubles paid for one Chinese yuan, subject to the quotation convention reported by the Moscow Exchange.
 
-The opening, highest, lowest, closing and weighted-average prices are separate original exchange observations. No single analytical spot-price measure is defined in this raw-data description.
+The opening, highest, lowest, closing and weighted-average prices are separate original exchange observations.
 
 ## 4. CNY/RUB Futures Data
 
