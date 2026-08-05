@@ -47,7 +47,6 @@
 | Quotation | Spot and normalized futures prices are RUB per one CNY, USD, or EUR. For CNY/RUB, RUB is domestic/quote currency and CNY is foreign/base currency. |
 | Time | `days_to_maturity = expiry_date - trade_date`; `ttm_years = days_to_maturity / 365`. |
 | Rate match | Closest available tenor to remaining maturity, using backward as-of observations only. Market-rate maximum staleness is 14 calendar days; monthly LPR allows 45. Tenor, distance, date, staleness, method, and source family are stored. |
-| Theoretical price | $F^*_{t,T}=S_t\exp[(r^{RUB}_{t,T}-r^{foreign}_{t,T})T]$, using annual percentage rates divided by 100. Pricing outputs are currently populated for CNY/RUB; USD/EUR histories support activity comparisons. |
 | Deviations | Observed minus theoretical price; percentage and log basis; annualized log basis; implied, observed, and excess funding differentials; change in absolute basis toward expiry. |
 | Interpretation | A positive basis means the observed future exceeds this simple benchmark. It is not proof of executable arbitrage after costs, margin, access restrictions, controls, sanctions, settlement risk, and convertibility. |
 
