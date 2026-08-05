@@ -105,8 +105,6 @@ The volume-weighted average price represents the average execution price during 
 
 The closing price represents the final or officially reported closing market price. It may differ from both the settlement price and the volume-weighted average price.
 
----
-
 ## 5. Futures Trading-Activity Data
 
 The futures dataset also contains original exchange observations describing market activity and liquidity.
@@ -147,8 +145,6 @@ It differs from trading volume:
 
 An increase in open interest indicates that new outstanding positions have been created. A decrease indicates that existing positions have been closed, expired or otherwise removed.
 
----
-
 ## 6. Futures Contract Information
 
 Contract-level information is used to identify individual futures instruments and determine their contractual characteristics.
@@ -168,37 +164,7 @@ Contract-level information is used to identify individual futures instruments an
 
 The expiration date is obtained from the exchange contract specification. It is not calculated from the contract code.
 
-Several futures contracts may be active simultaneously. For example, a short-maturity contract and a longer-maturity contract may both have valid price and trading observations on the same date.
-
----
-
-## 7. Nearby Futures Contract Data
-
-The project contains a nearby-contract dataset that identifies the shortest-maturity active futures contract for each trading date.
-
-The underlying market observations remain original exchange data. However, the selection of which contract is treated as the nearby contract is part of the dataset-construction procedure rather than an original variable published by the exchange.
-
-The nearby dataset may contain the following original fields copied from the selected contract:
-
-| Field | Description |
-|---|---|
-| `trade_date` | Trading date of the observation. |
-| `security_id` | Identifier of the selected futures contract. |
-| `contract_code` | Code of the selected futures contract. |
-| `expiry_date` | Official contract expiration date. |
-| `futures_settle_price` | Exchange-reported settlement price. |
-| `futures_wap_price` | Exchange-reported weighted-average price. |
-| `futures_close` | Exchange-reported closing price. |
-| `volume_contracts` | Exchange-reported trading volume. |
-| `open_interest_contracts` | Exchange-reported open interest. |
-| `futures_num_trades` | Exchange-reported number of transactions. |
-| `turnover_rub` | Exchange-reported trading turnover. |
-
-The term “nearby” describes the contract-selection rule. It is not the name of a separate financial instrument traded on the exchange.
-
----
-
-## 8. Historical USD/RUB and EUR/RUB Data
+## 7. Historical USD/RUB and EUR/RUB Data
 
 Historical USD/RUB and EUR/RUB futures and spot-market observations are included as comparison datasets.
 
