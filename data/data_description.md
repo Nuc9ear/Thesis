@@ -186,9 +186,7 @@ The historical datasets may contain the same types of original market variables 
 
 The USD/RUB and EUR/RUB observations are not mechanically combined with the CNY/RUB observations. They represent separate instruments, quotation conventions, market environments and historical periods.
 
----
-
-## 9. Funding-Rate Data
+## 8. Funding-Rate Data
 
 Funding-rate data describe the cost of borrowing or lending Russian rubles and Chinese yuan over different maturities.
 
@@ -226,9 +224,7 @@ Depending on availability, the dataset may include:
 
 The reported interest rates are retained in the units used by the original source, normally annual percentage rates. Unit conversions, interpolation and maturity matching are analytical procedures and are not part of the raw-data description.
 
----
-
-## 10. Frequency and Unit of Observation
+## 9. Frequency and Unit of Observation
 
 Most market data are observed at a daily frequency.
 
@@ -247,9 +243,7 @@ Weekends, public holidays and exchange closure dates normally have no trading ob
 
 Different sources may follow different holiday calendars. For example, Russian and Chinese money markets may not be open on exactly the same dates.
 
----
-
-## 11. Price Units and Currency Conventions
+## 10. Price Units and Currency Conventions
 
 CNY/RUB prices represent the value of the Chinese yuan in Russian rubles according to the quotation convention of the relevant Moscow Exchange instrument.
 
@@ -260,71 +254,3 @@ Monetary trading indicators such as turnover and the value of open interest are 
 Interest rates are normally reported as annual percentage rates unless the original source specifies another convention.
 
 Contract size and quotation units should be interpreted using the official specification of each futures contract.
-
----
-
-## 12. Raw and Standardised Variables
-
-Some variable names in the project differ from the original names used by the data provider. For example, an exchange field may be renamed to `futures_settle_price` or `spot_wap_price` to make its meaning clearer and to maintain consistent naming across files.
-
-Renaming a field does not change the underlying value. These standardised variables still represent original source observations.
-
-The following operations do not constitute the calculation of a new economic variable:
-
-- renaming columns;
-- converting dates into a consistent date format;
-- converting text-formatted numbers into numeric format;
-- arranging columns in a consistent order;
-- attaching source and instrument identifiers;
-- combining observations from different dates into one table.
-
----
-
-## 13. Variables Excluded from This Raw-Data Description
-
-The following variables are generated during data processing or empirical analysis and are therefore not described as original data:
-
-- selected analytical spot price;
-- selected analytical futures price;
-- spot or futures returns;
-- logarithmic returns;
-- futures basis;
-- percentage basis;
-- annualised basis;
-- theoretical futures price;
-- cost-of-carry value;
-- deviation from theoretical value;
-- implied interest rate;
-- interest-rate differential;
-- days to contract expiration;
-- time to maturity expressed in years;
-- interpolated funding rates;
-- matched-maturity funding rates;
-- rolling volatility;
-- realised volatility;
-- price range indicators;
-- bid–ask spread proxies;
-- turnover-based liquidity indicators;
-- volume-based liquidity indicators;
-- open-interest changes;
-- rolling averages;
-- standardised or normalised variables;
-- market-pressure indicators;
-- regression variables;
-- interaction terms;
-- dummy variables;
-- outlier flags;
-- structural-break indicators;
-- hedging-effectiveness measures.
-
-These variables are constructed from the original observations described above and should be documented separately in the methodology or derived-variable section.
-
----
-
-## 14. Summary
-
-The raw dataset combines daily spot-market prices, futures-contract prices, trading activity, open interest, contract specifications and money-market interest rates.
-
-The principal focus is the CNY/RUB market from the second half of 2022 onward. Historical USD/RUB and EUR/RUB data provide a pre-2022 comparison.
-
-The data structure preserves both individual futures contracts and the original market information reported for each trading date. This makes it possible to analyse pricing across contracts, maturities and market conditions while maintaining a clear distinction between externally obtained observations and variables constructed by the researcher.
