@@ -1,7 +1,5 @@
 # Data Description
 
-The dataset is a reproducible daily panel for studying the reorientation of Russia's exchange-traded FX market toward CNY/RUB, derivatives pricing relative to funding costs, market pressure, and changes around configurable sanctions-related events. “USD/EUR collapse” is interpreted as declining exchange activity, volume, turnover, trades, liquidity, and open interest—not necessarily a decline in USD or EUR value.
-
 ## Page 1: Scope, sources, and market panels
 
 ### Table 1. Design and current coverage
