@@ -10,10 +10,6 @@ Historical USD/RUB and EUR/RUB data from the period before 2022 are also include
 
 The main frequency of the dataset is daily. Each observation normally represents one trading date for a particular market instrument or futures contract.
 
-This section describes only variables obtained directly from the original data sources. Variables calculated during data processing or empirical analysis, such as returns, basis measures, theoretical futures prices and volatility indicators, are not included.
-
----
-
 ## 2. Main Data Sources
 
 The data are collected primarily from the following sources:
