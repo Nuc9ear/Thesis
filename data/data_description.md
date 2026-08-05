@@ -20,55 +20,55 @@ Exchange-rate changes can be measured from daily spot and futures prices using l
 
 Yes. `open_interest_contracts` and `open_interest_value_rub` are available by futures `SECID` and trading date. Open interest is a stock of outstanding positions, whereas `volume_contracts` is the number of contracts traded during the day.
 
-## 6. Are CNY vanilla put and call option data available?
+## 5. Are CNY vanilla put and call option data available?
 
 Yes. The futures-option panel contains 1,648,342 daily observations: 824,171 calls and 824,171 puts, covering 30,328 option SECIDs from 2022-06-20 to 2026-08-03. Prices, strikes, expirations, volume, turnover, trades, and open interest are included.
 
-## 7. Are the options written on spot CNY/RUB or on CNY/RUB futures?
+## 6. Are the options written on spot CNY/RUB or on CNY/RUB futures?
 
 The analytical option panel contains options whose exact MOEX underlying is a CNY/RUB futures `SECID`. They are futures options, not spot-FX options. Another 5,346 raw observations found by the broad collection query have a spot underlying; they remain in raw/audit data but are excluded from the futures-option panel.
 
-## 8. What are the FX option quotation conventions: strike, delta, premium and maturity?
+## 7. What are the FX option quotation conventions: strike, delta, premium and maturity?
 
 - **Strike:** RUB per CNY, consistent with the underlying CNY/RUB futures quotation.
-- **Delta:** unadjusted Black--76 futures delta; calls range from 0 to 1 and puts from -1 to 0. It is not premium-adjusted OTC FX spot delta.
+- **Delta:** unadjusted Black-76 futures delta; calls range from 0 to 1 and puts from -1 to 0. It is not premium-adjusted OTC FX spot delta.
 - **Premium/price:** option prices are in RUB-per-CNY price units. Contracts are futures-style/margined and the model discount factor is one. Settlement normally supplies the historical analytical price because bid and ask are unavailable.
 - **Maturity:** calendar days from trade date to option expiration, converted using Actual/365. Option expiration and underlying-futures expiration are retained separately.
 
-Most resolved contracts are identified as American exercise, so Black--76 does not capture possible early exercise.
+Most resolved contracts are identified as American exercise, so Black-76 does not capture possible early exercise.
 
-## 9. Are option delta, implied volatility and volatility-surface data available?
+## 8. Are option delta, implied volatility and volatility-surface data available?
 
 Yes, but they are calculated rather than exchange-quoted. The option panel contains Black--76 implied volatility, futures delta, gamma, and vega. The surface file contains 9,690 underlying-expiry-day summaries with ATM, nearest observed 10-delta and 25-delta call/put IVs, risk reversals, and butterflies. Points are nearest observations, not exact interpolated delta quotes.
 
-## 10. What futures price data are available for different contract maturities?
+## 9. What futures price data are available for different contract maturities?
 
 The full panel contains 56,515 daily observations for 188 resolved contracts: 22 CNY/RUB, 92 USD/RUB, and 74 EUR/RUB. Raw and normalized OHLC, settlement, VWAP, the selected analytical price, first/last trading dates, expiration, and remaining maturity are available. `futures_pricing_panel.csv` retains every maturity; `fx_nearby_daily.csv` selects the shortest positive-price non-expired contract for each pair-date.
 
-## 11. Which Russian and Chinese funding rates are available by maturity?
+## 10. Which Russian and Chinese funding rates are available by maturity?
 
 - **RUB:** RUSFAR O/N, 1W, 2W, 1M, and 3M; RUONIA O/N; Bank of Russia key rate.
 - **CNY:** CNY RUSFAR O/N and 1W; Shibor O/N, 1W, 2W, 1M, 3M, 6M, 9M, and 1Y; FR/FDR repo fixings at 1D, 7D, and 14D; LPR 1Y and 5Y; PBOC 7-day reverse-repo rate.
 
 Each wide funding series includes its source observation date and staleness in days.
 
-## 12. What proxy funding rates can be used when direct rates are unavailable?
+## 11. What proxy funding rates can be used when direct rates are unavailable?
 
 For RUB, RUONIA is the main overnight fallback to RUSFAR. For CNY, the closest Shibor tenor is the main fallback to CNY RUSFAR. FR/FDR repo fixings are useful secured-market robustness proxies. The CBR key rate, PBOC reverse-repo rate, and LPR are policy or published-reference proxies and should be kept distinct from marginal market funding.
 
-## 13. Are published bank rates or interbank interest rates more appropriate?
+## 12. Are published bank rates or interbank interest rates more appropriate?
 
 For short-dated derivatives pricing, secured or interbank market rates such as RUSFAR, RUONIA, Shibor, and repo fixings are generally more appropriate because they are closer to short-term market funding conditions. LPR and policy rates are better used as background or robustness variables. Neither type measures the exact funding cost faced by a sanctioned or institution-specific trader.
 
-## 14. Does the observed futures premium exceed the theoretical premium?
+## 13. Does the observed futures premium exceed the theoretical premium?
 
 Not on average in the nearby CNY/RUB series. Since the basis is $100(F-F^*)/F^*$, a positive value means that the observed premium exceeds the cost-of-carry benchmark. Across 1,030 nearby observations, the mean basis is -0.34%, the median is -0.17%, and only 39.8% of observations are positive. The answer varies by date and maturity, but the observed future is more often below than above the benchmark in this sample.
 
-## 15. Is there evidence of arbitrage or a persistent risk premium?
+## 14. Is there evidence of arbitrage or a persistent risk premium?
 
 There is evidence of persistent pricing deviations, but not proof of executable arbitrage. The nearby CNY/RUB basis has lag-one autocorrelation of about 0.68 and is negative in about 60% of observations. Persistence is compatible with a risk premium, funding segmentation, capital controls, sanctions, settlement risk, or measurement mismatch. Without executable bid--ask quotes, transaction costs, margin costs, and institution-specific funding access, the data cannot separate these explanations or establish arbitrage profits.
 
-## 16. How did pricing, liquidity, funding rates and volatility change before and after sanctions?
+## 15. How did pricing, liquidity, funding rates and volatility change before and after sanctions?
 
 The strongest descriptive changes are:
 
@@ -79,7 +79,7 @@ The strongest descriptive changes are:
 
 These are short-window descriptive comparisons. They do not isolate sanctions from simultaneous policy, volatility, liquidity, and macroeconomic changes.
 
-## 17. What variables, frequency, units and coverage does each dataset contain?
+## 16. What variables, frequency, units and coverage does each dataset contain?
 
 | Dataset | Frequency and row unit | Main variables and units | Current coverage |
 |---|---|---|---|
