@@ -32,9 +32,7 @@ The Moscow Exchange provides:
 
 ### Bank of Russia
 
-The Bank of Russia provides official foreign-exchange and monetary data used to describe conditions in the Russian currency and money markets.
-
-These data may include:
+The Bank of Russia provides official foreign-exchange and monetary data used to describe conditions in the Russian currency and money markets:
 
 - official foreign-exchange rates;
 - key monetary-policy rates;
@@ -50,8 +48,6 @@ Chinese interest-rate information is obtained from official institutions and mar
 - the National Interbank Funding Center.
 
 The Chinese data include interbank interest rates such as SHIBOR and, where available, relevant secured or repo-market rates.
-
----
 
 ## 3. CNY/RUB Spot-Market Data
 
@@ -77,8 +73,6 @@ The spot-market dataset contains daily trading information published by the Mosc
 The spot prices are expressed as the number of Russian rubles paid for one Chinese yuan, subject to the quotation convention reported by the Moscow Exchange.
 
 The opening, highest, lowest, closing and weighted-average prices are separate original exchange observations. No single analytical spot-price measure is defined in this raw-data description.
-
----
 
 ## 4. CNY/RUB Futures Data
 
