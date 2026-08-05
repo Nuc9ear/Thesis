@@ -1,256 +1,102 @@
-# Data Description and Data Dictionary
+# Short Answers to Data and Research Questions
 
-## 1. Overview
+This document answers the main data-availability and interpretation questions using the current repository checkpoint. Before/after figures are unadjusted 90-calendar-day comparisons from `analysis/event_window_comparison.csv`; they describe changes around an event but do not by themselves establish causality.
 
-The dataset contains daily foreign-exchange, futures-market, contract-specification and funding-rate data used to study the pricing of CNY/RUB futures traded on the Moscow Exchange.
+## 1. What spot data are available for CNY/RUB, USD/RUB and EUR/RUB?
 
-The core empirical period begins in the second half of 2022, when the Chinese yuan became substantially more important in the Russian foreign-exchange and derivatives markets. The CNY/RUB dataset extends from this period to the latest date available at the time of data collection.
+Daily MOEX spot OHLC, VWAP, and number of trades are available for `CNYRUB_TOM`, `USD000UTSTOM`, and `EUR_RUB__TOM`. Bank of Russia official daily reference rates are also available. The combined panel contains 12,408 pair-days from 2013-01-08 to 2026-08-04. Historical pair-level spot volume, RUB turnover, bid, and ask are not populated in the free MOEX history.
 
-Historical USD/RUB and EUR/RUB data from the period before 2022 are also included for comparison. These historical currency pairs provide a benchmark for examining whether the pricing and trading characteristics of CNY/RUB futures differ from those of the Russian derivatives market before the major structural changes that occurred in 2022.
+## 2. How did USD/RUB and EUR/RUB trading change or collapse after sanctions?
 
-The main frequency of the dataset is daily. Each observation normally represents one trading date for a particular market instrument or futures contract.
+The clearest collapse is in exchange spot trading after the 2024-06-13 suspension: average USD/RUB and EUR/RUB spot trade counts fell by 100% to zero in the following 90-day window. Futures did not disappear. Over the same window, nearby USD/RUB futures volume fell 6.9%, turnover 12.0%, and open interest 23.4%; EUR/RUB futures volume fell 1.0%, turnover 6.0%, and open interest 36.9%. Their futures market shares also declined as activity shifted toward CNY/RUB.
 
-## 2. Main Data Sources
+The earlier 2022-02-24 event was associated with a larger immediate futures contraction: in 90-day windows, USD/RUB futures volume fell about 55% and EUR/RUB volume about 78%, while turnover fell about 55% and 79%, respectively.
 
-The data are collected primarily from the following sources:
+## 3. What data are available on exchange-rate changes, trading flows and volume?
 
-### Moscow Exchange
+Exchange-rate changes can be measured from daily spot and futures prices using log returns, percentage changes, absolute returns, cumulative spot changes, and daily ranges. Futures and options contain daily volume, RUB turnover, number of trades, and open interest. Spot contains number of trades, but historical spot volume and turnover are unavailable. Official reference rates contain no trading-flow information.
 
-The Moscow Exchange provides:
+## 4. Is daily open interest available for each futures contract?
 
-- CNY/RUB spot-market data;
-- CNY/RUB futures prices;
-- USD/RUB and EUR/RUB historical futures data;
-- trading volume;
-- number of transactions;
-- open interest;
-- turnover;
-- settlement prices;
-- futures contract expiration dates;
-- futures contract specifications;
-- Russian-ruble and Chinese-yuan money-market benchmarks.
+Yes. `open_interest_contracts` and `open_interest_value_rub` are available by futures `SECID` and trading date. Open interest is a stock of outstanding positions, whereas `volume_contracts` is the number of contracts traded during the day.
 
-### Bank of Russia
+## 5. Which indicators can be used to measure market pressure?
 
-The Bank of Russia provides official foreign-exchange and monetary data used to describe conditions in the Russian currency and money markets:
+Available proxies include futures price change times volume, log return times volume, $\operatorname{sign}(r_t)\times\Delta OI_t$, volume/open interest, turnover/open-interest value, rolling abnormal-volume and abnormal-open-interest z-scores, Amihud illiquidity, spot return times trade count, bid--ask spread where available, and currency-pair activity shares. These are aggregate proxies, not directly observed signed order flow.
 
-- official foreign-exchange rates;
-- key monetary-policy rates;
-- money-market indicators;
-- historical Russian foreign-exchange information.
+## 6. Are CNY vanilla put and call option data available?
 
-### Official Chinese financial-market sources
+Yes. The futures-option panel contains 1,648,342 daily observations: 824,171 calls and 824,171 puts, covering 30,328 option SECIDs from 2022-06-20 to 2026-08-03. Prices, strikes, expirations, volume, turnover, trades, and open interest are included.
 
-Chinese interest-rate information is obtained from official institutions and market administrators, including:
+## 7. Are the options written on spot CNY/RUB or on CNY/RUB futures?
 
-- the People’s Bank of China;
-- the China Foreign Exchange Trade System;
-- the National Interbank Funding Center.
+The analytical option panel contains options whose exact MOEX underlying is a CNY/RUB futures `SECID`. They are futures options, not spot-FX options. Another 5,346 raw observations found by the broad collection query have a spot underlying; they remain in raw/audit data but are excluded from the futures-option panel.
 
-The Chinese data include interbank interest rates such as SHIBOR and, where available, relevant secured or repo-market rates.
+## 8. What are the FX option quotation conventions: strike, delta, premium and maturity?
 
-## 3. CNY/RUB Spot-Market Data
+- **Strike:** RUB per CNY, consistent with the underlying CNY/RUB futures quotation.
+- **Delta:** unadjusted Black--76 futures delta; calls range from 0 to 1 and puts from -1 to 0. It is not premium-adjusted OTC FX spot delta.
+- **Premium/price:** option prices are in RUB-per-CNY price units. Contracts are futures-style/margined and the model discount factor is one. Settlement normally supplies the historical analytical price because bid and ask are unavailable.
+- **Maturity:** calendar days from trade date to option expiration, converted using Actual/365. Option expiration and underlying-futures expiration are retained separately.
 
-The principal spot-market instrument is `CNYRUB_TOM` traded on the Moscow Exchange.
+Most resolved contracts are identified as American exercise, so Black--76 does not capture possible early exercise.
 
-`CNYRUB_TOM` represents the exchange rate between the Chinese yuan and the Russian ruble with settlement on the next business day. Therefore, it is a next-day-settlement foreign-exchange instrument rather than an immediate cash transaction.
+## 9. Are option delta, implied volatility and volatility-surface data available?
 
-The spot-market dataset contains daily trading information published by the Moscow Exchange.
+Yes, but they are calculated rather than exchange-quoted. The option panel contains Black--76 implied volatility, futures delta, gamma, and vega. The surface file contains 9,690 underlying-expiry-day summaries with ATM, nearest observed 10-delta and 25-delta call/put IVs, risk reversals, and butterflies. Points are nearest observations, not exact interpolated delta quotes.
 
-### Spot-market variables
+## 10. What futures price data are available for different contract maturities?
 
-| Variable | Description |
-|---|---|
-| `trade_date` | Calendar date on which the spot-market observation was recorded. |
-| `security_id` | Exchange identifier of the financial instrument, such as `CNYRUB_TOM`. |
-| `spot_open` | First recorded trading price of the instrument during the trading session. |
-| `spot_low` | Lowest traded spot price recorded during the trading session. |
-| `spot_high` | Highest traded spot price recorded during the trading session. |
-| `spot_close` | Last or closing spot price recorded for the trading session. |
-| `spot_wap_price` | Volume-weighted average price reported by the exchange for the trading session. |
-| `spot_num_trades` | Total number of transactions executed in the spot instrument during the trading session. |
+The full panel contains 56,515 daily observations for 188 resolved contracts: 22 CNY/RUB, 92 USD/RUB, and 74 EUR/RUB. Raw and normalized OHLC, settlement, VWAP, the selected analytical price, first/last trading dates, expiration, and remaining maturity are available. `futures_pricing_panel.csv` retains every maturity; `fx_nearby_daily.csv` selects the shortest positive-price non-expired contract for each pair-date.
 
-The spot prices are expressed as the number of Russian rubles paid for one Chinese yuan, subject to the quotation convention reported by the Moscow Exchange.
+## 11. Which Russian and Chinese funding rates are available by maturity?
 
-The opening, highest, lowest, closing and weighted-average prices are separate original exchange observations.
+- **RUB:** RUSFAR O/N, 1W, 2W, 1M, and 3M; RUONIA O/N; Bank of Russia key rate.
+- **CNY:** CNY RUSFAR O/N and 1W; Shibor O/N, 1W, 2W, 1M, 3M, 6M, 9M, and 1Y; FR/FDR repo fixings at 1D, 7D, and 14D; LPR 1Y and 5Y; PBOC 7-day reverse-repo rate.
 
-## 4. CNY/RUB Futures Data
+Each wide funding series includes its source observation date and staleness in days.
 
-The futures dataset contains daily observations for CNY/RUB futures contracts traded on the Moscow Exchange Derivatives Market.
+## 12. What proxy funding rates can be used when direct rates are unavailable?
 
-Unlike a continuous futures series, the contract-level data preserve the identity of each individual futures contract. Consequently, different contracts may be observed on the same trading day because contracts with different expiration dates can trade simultaneously.
+For RUB, RUONIA is the main overnight fallback to RUSFAR. For CNY, the closest Shibor tenor is the main fallback to CNY RUSFAR. FR/FDR repo fixings are useful secured-market robustness proxies. The CBR key rate, PBOC reverse-repo rate, and LPR are policy or published-reference proxies and should be kept distinct from marginal market funding.
 
-The basic unit of observation is therefore:
+## 13. Are published bank rates or interbank interest rates more appropriate?
 
-> One futures contract on one trading date.
+For short-dated derivatives pricing, secured or interbank market rates such as RUSFAR, RUONIA, Shibor, and repo fixings are generally more appropriate because they are closer to short-term market funding conditions. LPR and policy rates are better used as background or robustness variables. Neither type measures the exact funding cost faced by a sanctioned or institution-specific trader.
 
-### Futures price variables
+## 14. Does the observed futures premium exceed the theoretical premium?
 
-| Variable | Description |
-|---|---|
-| `trade_date` | Date on which the futures-market observation was recorded. |
-| `security_id` | Unique Moscow Exchange identifier of the futures contract. |
-| `contract_code` | Exchange code or ticker identifying the individual futures contract. |
-| `futures_low` | Lowest traded price of the futures contract during the trading session. |
-| `futures_high` | Highest traded price of the futures contract during the trading session. |
-| `futures_close` | Closing or last reported price of the futures contract for the trading session. |
-| `futures_settle_price` | Official settlement price established by the Moscow Exchange for the contract on the relevant trading day. |
-| `futures_wap_price` | Volume-weighted average trading price of the futures contract during the session. |
-| `change` | Daily price change reported directly by the Moscow Exchange. Although this field represents a change in price, it is retained as an exchange-provided observation and is not calculated by the researcher. |
-| `swaprate` | Swap-rate field reported by the source for the relevant instrument, where available. |
+Not on average in the nearby CNY/RUB series. Since the basis is $100(F-F^*)/F^*$, a positive value means that the observed premium exceeds the cost-of-carry benchmark. Across 1,030 nearby observations, the mean basis is -0.34%, the median is -0.17%, and only 39.8% of observations are positive. The answer varies by date and maturity, but the observed future is more often below than above the benchmark in this sample.
 
-The settlement price is the official value used by the exchange for daily contract settlement and variation-margin calculations. It is not necessarily equal to the final transaction price.
+## 15. Is there evidence of arbitrage or a persistent risk premium?
 
-The volume-weighted average price represents the average execution price during the trading session, with transactions weighted by their trading quantities.
+There is evidence of persistent pricing deviations, but not proof of executable arbitrage. The nearby CNY/RUB basis has lag-one autocorrelation of about 0.68 and is negative in about 60% of observations. Persistence is compatible with a risk premium, funding segmentation, capital controls, sanctions, settlement risk, or measurement mismatch. Without executable bid--ask quotes, transaction costs, margin costs, and institution-specific funding access, the data cannot separate these explanations or establish arbitrage profits.
 
-The closing price represents the final or officially reported closing market price. It may differ from both the settlement price and the volume-weighted average price.
+## 16. How did pricing, liquidity, funding rates and volatility change before and after sanctions?
 
-## 5. Futures Trading-Activity Data
+The strongest descriptive changes are:
 
-The futures dataset also contains original exchange observations describing market activity and liquidity.
+- Around 2022-02-24, 20-day annualized spot volatility rose from 11.6% to 55.2% for CNY/RUB, from 10.4% to 44.0% for USD/RUB, and from 11.0% to 40.9% for EUR/RUB. USD/RUB and EUR/RUB futures volume and turnover contracted sharply.
+- Around the 2024-06-13 suspension, CNY/RUB nearby volume rose 65.9%, turnover 55.7%, and futures trades 102.9%. Its futures-volume share rose from 78.1% to 85.9%.
+- The mean CNY/RUB basis moved from -0.50% to -1.53%, while the observed RUB-minus-CNY funding differential rose from 13.91 to 14.66 percentage points.
+- Amihud illiquidity increased about 21% for CNY/RUB, 89% for USD/RUB, and 92% for EUR/RUB. ATM CNY/RUB option IV rose from 14.8% to 19.4%.
 
-| Variable | Description |
-|---|---|
-| `qty` | Trading quantity reported by the Moscow Exchange for the relevant contract and date. |
-| `futures_num_trades` | Number of transactions executed in the futures contract during the trading session. |
-| `volume_contracts` | Total number of futures contracts traded during the trading session. |
-| `turnover_rub` | Total value of trading activity expressed in Russian rubles, as reported by the exchange. |
-| `open_interest_contracts` | Number of outstanding futures contracts remaining open at the end of the trading session. |
-| `open_interest_value_rub` | Exchange-reported monetary value of outstanding open positions, expressed in Russian rubles. |
+These are short-window descriptive comparisons. They do not isolate sanctions from simultaneous policy, volatility, liquidity, and macroeconomic changes.
 
-### Trading volume
+## 17. What variables, frequency, units and coverage does each dataset contain?
 
-Trading volume measures the number of contracts exchanged during a particular trading day. It reflects the level of market activity but does not show how many positions remained open after trading ended.
+| Dataset | Frequency and row unit | Main variables and units | Current coverage |
+|---|---|---|---|
+| `fx_spot_panel.csv` | Daily pair-day | Prices in RUB per foreign-currency unit; trades as counts; returns/volatility as decimals; changes/ranges as percent | 12,408 rows; 2013-01-08--2026-08-04 |
+| `futures_pricing_panel.csv` | Daily pair-contract-day | Raw/source and normalized RUB-per-unit prices; volume/OI in contracts; turnover/OI value in RUB; rates and basis in percent | 56,515 rows; 2009-01-11--2026-08-03 |
+| `fx_nearby_daily.csv` | Daily pair-day | Same units as full futures panel plus roll indicator | 9,885 rows; 2009-01-11--2026-08-03 |
+| `funding_curve_daily.csv` | Daily/as-of date | Rates in annual percent; source dates; staleness in calendar days | 5,128 rows; calendar 2009-01-11--2026-08-04, with rate values mainly from 2022 |
+| `currency_market_share_daily.csv` | Daily pair-day | Spot trades as counts; futures contracts, RUB turnover, OI and trades; shares as fractions | 14,363 rows; 2009-01-11--2026-08-04 |
+| `market_pressure_daily.csv` | Daily pair-day | Price/activity products, ratios, z-scores, Amihud return per RUB million, basis percent | 9,885 rows; 2009-01-11--2026-08-03 |
+| `options_panel.csv` | Daily option-contract-day | Prices/strikes in RUB per CNY; volume/OI in contracts; turnover in RUB; IV as annualized decimal; Greeks/model fields | 1,648,342 rows; 2022-06-20--2026-08-03 |
+| `volatility_surface_daily.csv` | Daily underlying-expiry-day | IV and risk measures as decimal volatility; strikes in RUB per CNY; deltas dimensionless | 9,690 rows; 2022-06-20--2026-07-17 |
+| `sanctions_regime_daily.csv` | Daily date | Regime category, Boolean event flags, signed calendar days from events | 5,128 rows; 2009-01-11--2026-08-04 |
+| `contract_daily.csv` | Legacy daily CNY contract-day | CNY futures, spot, funding, maturity, and basis fields | 6,042 rows; 2022-07-01--2026-07-17 |
+| `nearby_daily.csv` | Legacy daily CNY date | Legacy shortest-maturity CNY futures series and roll flag | 1,030 rows; 2022-07-01--2026-07-17 |
 
-A purchase and sale together constitute a futures transaction. The exact counting convention follows the methodology used by the Moscow Exchange.
-
-### Number of trades
-
-The number of trades records how many individual transactions occurred during the session. It differs from contract volume because one transaction may involve more than one contract.
-
-### Turnover
-
-Turnover represents the exchange-reported monetary value associated with trading activity. It provides an additional measure of market size and activity.
-
-Turnover is taken directly from the source and is not reconstructed by multiplying price and volume in the analytical dataset.
-
-### Open interest
-
-Open interest measures the number of futures contracts that remained outstanding at the end of the trading day.
-
-It differs from trading volume:
-
-- trading volume measures contracts traded during the day;
-- open interest measures contracts that remained open after the trading session.
-
-An increase in open interest indicates that new outstanding positions have been created. A decrease indicates that existing positions have been closed, expired or otherwise removed.
-
-## 6. Futures Contract Information
-
-Contract-level information is used to identify individual futures instruments and determine their contractual characteristics.
-
-| Variable | Description |
-|---|---|
-| `security_id` | Unique exchange identifier assigned to the contract. |
-| `contract_code` | Trading code or ticker of the futures contract. |
-| `short_name` | Abbreviated contract name published by the exchange. |
-| `underlying_asset` | Currency pair or financial instrument underlying the futures contract. |
-| `trade_date` | Date of the relevant market observation. |
-| `expiry_date` | Official expiration date of the futures contract. |
-| `last_trading_date` | Final date on which the contract may be traded, where this information is separately provided. |
-| `contract_size` | Standard quantity of the underlying currency represented by one futures contract, where provided in the contract specification. |
-| `quotation_unit` | Unit in which the futures price is quoted. |
-| `board_id` | Moscow Exchange trading-board identifier associated with the instrument. |
-
-The expiration date is obtained from the exchange contract specification. It is not calculated from the contract code.
-
-## 7. Historical USD/RUB and EUR/RUB Data
-
-Historical USD/RUB and EUR/RUB futures and spot-market observations are included as comparison datasets.
-
-These data mainly cover the Russian foreign-exchange market before 2022. They provide a benchmark for examining how futures pricing, liquidity and market participation changed after the Chinese yuan became one of the principal currencies traded in Russia.
-
-The historical datasets may contain the same types of original market variables as the CNY/RUB dataset:
-
-- trading date;
-- contract identifier;
-- expiration date;
-- closing price;
-- settlement price;
-- weighted-average price;
-- daily high and low prices;
-- trading volume;
-- number of trades;
-- turnover;
-- open interest.
-
-The USD/RUB and EUR/RUB observations are not mechanically combined with the CNY/RUB observations. They represent separate instruments, quotation conventions, market environments and historical periods.
-
-## 8. Funding-Rate Data
-
-Funding-rate data describe the cost of borrowing or lending Russian rubles and Chinese yuan over different maturities.
-
-These observations are required because futures prices are connected to the financing conditions of the two currencies. However, this section describes only the original published interest-rate observations and not any calculated interest-rate differential.
-
-### Russian-ruble funding data
-
-Russian-ruble funding conditions are represented using official or exchange-published money-market indicators, including the relevant MOEX and RUSFAR benchmarks.
-
-RUSFAR is a secured Russian money-market benchmark based on transactions or quotations involving ruble funding secured by eligible collateral.
-
-### Chinese-yuan funding data
-
-Chinese-yuan funding conditions are represented using relevant yuan-denominated money-market benchmarks.
-
-Depending on availability, the dataset may include:
-
-- MOEX yuan funding benchmarks;
-- Chinese interbank offered rates;
-- SHIBOR observations;
-- secured repo-market rates;
-- other official Chinese interbank funding indicators.
-
-### Funding-rate variables
-
-| Variable | Description |
-|---|---|
-| `observation_date` | Date for which the interest-rate observation was reported. |
-| `rate_id` | Identifier of the money-market rate or benchmark. |
-| `rate_name` | Name of the relevant interest-rate series. |
-| `currency` | Currency in which the funding instrument is denominated, normally RUB or CNY. |
-| `tenor` | Published maturity of the interest-rate instrument, such as overnight, one week, one month or three months. |
-| `rate` | Published interest rate for the relevant date and tenor. |
-| `source` | Institution or market platform that published the observation. |
-
-The reported interest rates are retained in the units used by the original source, normally annual percentage rates. Unit conversions, interpolation and maturity matching are analytical procedures and are not part of the raw-data description.
-
-## 9. Frequency and Unit of Observation
-
-Most market data are observed at a daily frequency.
-
-The exact unit of observation depends on the dataset:
-
-| Dataset | Unit of observation |
-|---|---|
-| Spot-market dataset | One currency instrument on one trading date |
-| Contract-level futures dataset | One futures contract on one trading date |
-| Nearby futures dataset | One selected futures contract on one trading date |
-| Contract-specification dataset | One futures contract |
-| Funding-rate dataset | One interest-rate instrument or tenor on one observation date |
-| Historical comparison dataset | One currency instrument or futures contract on one trading date |
-
-Weekends, public holidays and exchange closure dates normally have no trading observations.
-
-Different sources may follow different holiday calendars. For example, Russian and Chinese money markets may not be open on exactly the same dates.
-
-## 10. Price Units and Currency Conventions
-
-CNY/RUB prices represent the value of the Chinese yuan in Russian rubles according to the quotation convention of the relevant Moscow Exchange instrument.
-
-Futures prices follow the quotation rules specified by the Moscow Exchange for each contract.
-
-Monetary trading indicators such as turnover and the value of open interest are generally reported in Russian rubles.
-
-Interest rates are normally reported as annual percentage rates unless the original source specifies another convention.
-
-Contract size and quotation units should be interpreted using the official specification of each futures contract.
+For complete column-level definitions, see [`data_dictionary.md`](data_dictionary.md). For detailed formulas and interpretation, see [`data_description.md`](data_description.md).
