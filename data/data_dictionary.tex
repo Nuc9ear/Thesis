@@ -1,0 +1,142 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.8cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\newcommand{\field}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\tablehead}{\toprule\textbf{Field} & \textbf{Unit/format} & \textbf{Explanation} \\\midrule}
+
+\begin{document}
+\small
+
+\section*{Processed CNY/RUB Field Dictionary}
+
+The definitions below apply to both \field{contract_daily.csv} and
+\field{nearby_daily.csv}. The former contains one contract-date row and
+calculates futures returns within \field{secid}. The latter selects the
+non-expired contract with the shortest remaining maturity, adds
+\field{contract_changed}, and leaves its futures return missing on selection
+changes. Header order does not change field meaning.
+
+\subsection*{Identifiers and contract dates}
+\begin{longtable}{@{}p{0.25\textwidth}p{0.17\textwidth}p{0.52\textwidth}@{}}
+\tablehead
+\field{trade_date} & Date & Trading-session date for the row's futures, spot, and matched funding data. \\
+\field{boardid} & Text & MOEX board identifier; \field{RFUD} is the FORTS futures board used here. \\
+\field{secid} & Text & Exact MOEX futures-contract identifier and key for within-contract calculations. \\
+\field{shortname} & Text & MOEX short name reported in daily history, for example \field{CNY-9.22}. \\
+\field{assetcode} & Text & Underlying-asset code; \field{CNY} identifies Chinese-yuan futures. \\
+\field{shortname_meta} & Text & Short name obtained separately from contract-reference metadata and retained for validation. \\
+\field{expiry_date} & Date & Delivery/expiration date from MOEX \field{LSTDELDATE}. \\
+\field{first_trade_date} & Date & First date on which MOEX lists the contract as tradable. \\
+\field{last_trade_date} & Date & Scheduled last trading date from MOEX \field{LSTTRADE}, kept separately from expiry. \\
+\bottomrule
+\end{longtable}
+
+\subsection*{Futures-market fields}
+All price fields in this table are RUB per CNY. Missing raw values remain missing.
+
+\begin{longtable}{@{}p{0.25\textwidth}p{0.17\textwidth}p{0.52\textwidth}@{}}
+\tablehead
+\field{futures_open} & RUB/CNY & First reported futures trade price in the session. \\
+\field{futures_low} & RUB/CNY & Lowest reported futures trade price in the session. \\
+\field{futures_high} & RUB/CNY & Highest reported futures trade price in the session. \\
+\field{futures_close} & RUB/CNY & Closing/last trade price; distinct from the official settlement price. \\
+\field{open_interest_value_rub} & RUB & MOEX-reported notional value of open positions; not cash invested or a signed position. \\
+\field{turnover_rub} & RUB/day & Total reported RUB value of trades in the contract and session. \\
+\field{volume_contracts} & Contracts/day & Total contracts traded during the session. \\
+\field{open_interest_contracts} & Contracts & Reported open-interest stock at the session date, not daily flow. \\
+\field{futures_settle_price} & RUB/CNY & Official daily settlement price used for clearing and margin calculations. \\
+\field{swaprate} & MOEX native & SwapRate/funding component mainly for perpetual futures; normally missing for these dated contracts. \\
+\field{futures_wap_price} & RUB/CNY & Volume-weighted average futures trade price. \\
+\field{change} & Percent & MOEX-reported closing/last-price percentage change from the previous trading session. \\
+\field{qty} & Contracts & Contracts in the final reported trade, not total daily volume. \\
+\field{futures_num_trades} & Count/day & Number of futures trades executed during the session. \\
+\field{futures_price} & RUB/CNY & Analytical price: settlement, otherwise VWAP, otherwise close. \\
+\bottomrule
+\end{longtable}
+
+\subsection*{Spot-market fields}
+These fields refer to MOEX \field{CNYRUB_TOM}; prices are RUB per CNY.
+
+\begin{longtable}{@{}p{0.25\textwidth}p{0.17\textwidth}p{0.52\textwidth}@{}}
+\tablehead
+\field{spot_open} & RUB/CNY & First reported spot trade price in the session. \\
+\field{spot_low} & RUB/CNY & Lowest reported spot trade price in the session. \\
+\field{spot_high} & RUB/CNY & Highest reported spot trade price in the session. \\
+\field{spot_close} & RUB/CNY & Closing/last reported spot trade price. \\
+\field{spot_wap_price} & RUB/CNY & MOEX volume-weighted average spot price. \\
+\field{spot_num_trades} & Count/day & Number of spot trades; not volume or turnover. \\
+\field{spot_price} & RUB/CNY & Analytical spot price: VWAP, otherwise close. \\
+\field{spot_log_return} & Decimal & $\ln(S_t/S_{t-1})$ across consecutive spot observations. \\
+\field{spot_volatility_20d_ann} & Annual decimal & Rolling standard deviation of 20 spot returns times $\sqrt{252}$; minimum 10 returns. A value of 0.20 means about 20\% annualized. \\
+\bottomrule
+\end{longtable}
+
+\subsection*{Maturity and matched funding}
+Rates are matched backward as-of with no future information and at most 14 calendar days of staleness.
+
+\begin{longtable}{@{}p{0.25\textwidth}p{0.17\textwidth}p{0.52\textwidth}@{}}
+\tablehead
+\field{days_to_maturity} & Calendar days & Expiry date minus trade date; nearby selection requires a nonnegative value. \\
+\field{ttm_years} & Years & Time to maturity as days divided by 365 (Actual/365). \\
+\field{rub_rate_tenor} & MOEX SECID & RUB RUSFAR instrument with nominal tenor closest to maturity. \\
+\field{rub_rate_pct} & Percent p.a. & Annualized rate for the selected RUB tenor; divide by 100 for a decimal rate. \\
+\field{rub_tenor_distance_days} & Calendar days & Absolute difference between maturity days and selected RUB nominal tenor. \\
+\field{rub_rate_observation_date} & Date & Observation/publication date of the RUB rate used in the row. \\
+\field{cny_rate_tenor} & MOEX SECID & CNY RUSFAR instrument with nominal tenor closest to maturity. \\
+\field{cny_rate_pct} & Percent p.a. & Annualized rate for the selected CNY tenor; divide by 100 for a decimal rate. \\
+\field{cny_tenor_distance_days} & Calendar days & Absolute difference between maturity days and selected CNY nominal tenor. \\
+\field{cny_rate_observation_date} & Date & Observation/publication date of the CNY rate used in the row. \\
+\bottomrule
+\end{longtable}
+
+\subsection*{Derived pricing, basis, and returns}
+\begin{longtable}{@{}p{0.25\textwidth}p{0.17\textwidth}p{0.52\textwidth}@{}}
+\tablehead
+\field{theoretical_futures_price} & RUB/CNY & $S_t\exp[((r^{RUB}-r^{CNY})/100)T]$ under continuous compounding and Actual/365. Missing if a required valid input is unavailable. \\
+\field{basis_rub_per_cny} & RUB/CNY & Observed futures price minus theoretical price; positive means observed exceeds the benchmark. \\
+\field{basis_pct} & Percent & 100 times the level basis divided by theoretical price. \\
+\field{log_basis} & Decimal & $\ln(F_{observed}/F_{theoretical})$, defined only for positive prices. \\
+\field{futures_log_return} & Decimal & Within-\field{secid} log return in the contract panel; nearby-price log change in the nearby panel, missing on contract changes. \\
+\field{contract_changed} & Boolean; nearby only & True on the first nearby row and whenever selected \field{secid} differs from the preceding date. \\
+\bottomrule
+\end{longtable}
+
+\subsection*{Extended three-pair, funding, pressure, and option files}
+
+The repository also contains \field{fx_spot_panel.csv},
+\field{futures_pricing_panel.csv}, \field{fx_nearby_daily.csv},
+\field{funding_curve_daily.csv}, \field{market_pressure_daily.csv},
+\field{currency_market_share_daily.csv}, \field{options_panel.csv},
+\field{volatility_surface_daily.csv}, and
+\field{sanctions_regime_daily.csv}. The Markdown dictionary explains these
+field families and \field{docs/variable_catalog.csv} provides, for every raw,
+processed, and analysis column, its source, original field, unit, frequency,
+transformation, missing-value treatment, economic interpretation, and main
+limitation.
+
+Options are restricted to exact CNY/RUB futures underlyings. Black--76 uses a
+futures-style discount factor of one and unadjusted futures delta. Historical
+bid and ask are not available, so the price hierarchy normally begins with
+settlement. Invalid maturity, price, underlying, no-arbitrage bound, or implied
+volatility solutions are retained with a rejection reason. Surface ATM,
+25-delta, and 10-delta values are nearest actual observations, not interpolated
+quotes.
+
+\subsection*{Interpretation notes}
+Missing observations are not automatically zeros. Volume, turnover, open
+interest count, and open-interest value are distinct. Closing, settlement, and
+weighted-average prices are also distinct; \field{futures_price} records the
+selection rule. Finally, a cost-of-carry basis is a pricing deviation rather
+than proof of executable arbitrage after funding access, capital controls,
+margin, spreads, settlement, and sanctions constraints.
+
+\end{document}

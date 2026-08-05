@@ -1,0 +1,117 @@
+% Requires: \usepackage{booktabs,tabularx,array,geometry}
+% Suggested: \geometry{margin=1.7cm}
+\section*{Data Description}
+
+The data form a reproducible daily panel for studying the reorientation of
+Russia's exchange-traded FX market toward CNY/RUB, derivatives pricing relative
+to funding costs, market-pressure proxies, and configurable sanctions-related
+regimes. ``USD/EUR collapse'' means declining exchange activity and liquidity,
+not necessarily depreciation of the currencies.
+
+\subsection*{Page 1: Scope, sources, and market panels}
+
+\begin{table}[ht]
+\small
+\caption{Current processed coverage}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{3.3cm} X}
+\toprule
+Component & Coverage & Contents and research use \\
+\midrule
+Spot FX & 12,408 pair-days; 2013-01-08--2026-08-04 & CNY/RUB, USD/RUB, and EUR/RUB exchange prices and trade counts, Bank of Russia reference rates, returns, cumulative change, and rolling volatility. \\
+Full futures & 56,515 contract-days; 2009-01-11--2026-08-03 & All resolved CR, Si, and Eu maturities: raw and normalized prices, volume, turnover, trades, open interest, maturity, returns, funding, pricing, and regimes. \\
+Nearby futures & 9,885 pair-days & Shortest positive-price non-expired maturity; returns and activity changes are missing on rolls. \\
+CNY futures options & 1,648,342 rows; 2022-06-20--2026-08-03 & Calls and puts with exact futures underlying, prices, activity, Black--76 IV and Greeks, moneyness, parity, and rejection reason. \\
+Valid options/surface & 1,554,863 valid rows; 9,690 surface rows & Nearest observed ATM, 25-delta and 10-delta points, risk reversals, butterflies, and actual support counts. \\
+Funding/pressure/regimes & 5,128 funding dates; 9,885 pressure rows & Backward-as-of funding, market-pressure proxies, three-pair activity shares, and configurable event indicators. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[ht]
+\small
+\caption{Official sources}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.3cm} X X}
+\toprule
+Source & Series/instruments & Treatment \\
+\midrule
+Moscow Exchange ISS & Three RUB spot pairs; CR, Si, Eu futures; CNY futures options; RUSFAR & Raw exchange observations and exact contract descriptions. Si/Eu prices per 1,000 units are also normalized per unit. \\
+Bank of Russia & Official FX, key rate, RUONIA & Reference FX remains distinct from exchange prices. RUONIA is aligned by publication date. \\
+CFETS/ChinaMoney & Shibor and FR/FDR repo fixings & Unsecured interbank and secured repo families remain distinct; FDR007 is a DR007-related fixing proxy. \\
+People's Bank of China & LPR and 7-day reverse-repo changes & Policy/published rates are robustness or background proxies, not assumed marginal trader funding costs. \\
+Configuration & 2022-02-24, 2024-06-12, 2024-06-13, 2026-02-16 & Event dates and labels can be changed without modifying processing code. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[ht]
+\small
+\caption{Flow and market-pressure variables}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm} X X}
+\toprule
+Family & Construction & Interpretation boundary \\
+\midrule
+Currency change & Log/percentage/absolute return, cumulative change, and annualized 20-observation volatility & Returns are not joined across spot-source changes or futures rolls. \\
+Activity & Changes in volume, turnover, trades, and open interest; percentage OI change & Volume is a flow; open interest is a stock. \\
+Pressure & Price change $\times$ volume; return $\times$ volume; sign(return) $\times\Delta$OI & Proxies only, not signed order flow. \\
+Relative/liquidity & Volume/OI, turnover/OI value, abnormal z-scores, Amihud, spreads, trades & Zero denominators and unavailable historical quotes remain missing. \\
+Market share & Pair share of available three-pair spot trades and futures activity & Missing spot volume prevents a true spot-volume share. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\newpage
+\subsection*{Page 2: Funding, pricing, options, and validation}
+
+\begin{table}[ht]
+\small
+\caption{Maturity matching and futures pricing}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm} X}
+\toprule
+Item & Definition \\
+\midrule
+Quotation/time & RUB per one foreign-currency unit; $T=(\text{expiry}-\text{trade date})/365$. \\
+Rate match & Backward as-of closest tenor. Market-rate staleness is at most 14 calendar days; monthly LPR allows 45. Tenor, distance, date, staleness, method, and source family are stored. \\
+Theoretical price & $F^{*}_{t,T}=S_t\exp[(r^{RUB}_{t,T}-r^{foreign}_{t,T})T]$, using annual rates in decimals. Pricing outputs are populated for CNY/RUB; USD/EUR histories support activity comparisons. \\
+Deviations & Level, percentage, log and annualized basis; implied, observed, and excess funding differentials; convergence change. \\
+Boundary & A positive basis is not executable-arbitrage proof without costs, margin, funding access, controls, sanctions, settlement restrictions, and convertibility. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[ht]
+\small
+\caption{Option model and volatility surface}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm} X}
+\toprule
+Item & Implementation \\
+\midrule
+Scope & Vanilla calls/puts whose exact MOEX \texttt{UNDERLYINGASSET} is a CNY/RUB futures SECID. 5,346 spot-underlying option rows are preserved in raw/audit data but excluded. \\
+Price hierarchy & Bid--ask midpoint, settlement, VWAP, close. Historical bid/ask are unavailable, so settlement normally has priority. \\
+Model & Black--76 with futures-style discount factor one. MOEX American early exercise is not modelled and is a documented approximation. \\
+Delta & Unadjusted futures delta: $N(d_1)$ for calls and $N(d_1)-1$ for puts; not OTC spot, forward, or premium-adjusted delta. \\
+Surface & ATM minimizes $|\ln(K/F)|$. Nearest actual 25-delta and 10-delta call/put observations support risk reversal and butterfly; counts disclose support and no interpolation is presented as a quote. \\
+Rejections & Invalid maturity/price, missing dated underlying, no-arbitrage-bound violation, or no stable IV in the configured 0.01\%--500\% range. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[ht]
+\small
+\caption{Validation and availability limits}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm} X}
+\toprule
+Item & Result or limitation \\
+\midrule
+Strict validation & Zero failed error checks for duplicate keys, prices, dates, maturity, funding look-ahead/staleness, underlyings, and roll returns. \\
+Warnings & Four large parity residuals and 93,479 rejected option rows remain auditable. \\
+Spot gaps & Free MOEX spot history lacks consistent volume, turnover, bid, and ask; these are missing, not zero. \\
+Option gaps & Historical bid/ask are unavailable; midpoint and spread cannot be reconstructed. \\
+Funding & Closest-tenor rates are proxies. RUONIA is a fallback; repo, policy, and LPR remain distinct robustness measures. \\
+Reproducibility & Raw checkpoints, URLs, configuration, scripts, tests, analysis tables, variable catalogue, and quality reports are stored. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The complete per-column source, original field, unit, frequency,
+transformation, missing-value treatment, economic interpretation, and limitation
+is supplied in \texttt{docs/variable\_catalog.csv}.
