@@ -28,31 +28,22 @@ Yes. The futures-option panel contains 1,648,342 daily observations: 824,171 cal
 
 The analytical option panel contains options whose exact MOEX underlying is a CNY/RUB futures `SECID`. They are futures options, not spot-FX options. Another 5,346 raw observations found by the broad collection query have a spot underlying; they remain in raw/audit data but are excluded from the futures-option panel.
 
-## 7. What are the FX option quotation conventions: strike, delta, premium and maturity?
-
-- **Strike:** RUB per CNY, consistent with the underlying CNY/RUB futures quotation.
-- **Delta:** unadjusted Black-76 futures delta; calls range from 0 to 1 and puts from -1 to 0. It is not premium-adjusted OTC FX spot delta.
-- **Premium/price:** option prices are in RUB-per-CNY price units. Contracts are futures-style/margined and the model discount factor is one. Settlement normally supplies the historical analytical price because bid and ask are unavailable.
-- **Maturity:** calendar days from trade date to option expiration, converted using Actual/365. Option expiration and underlying-futures expiration are retained separately.
-
-Most resolved contracts are identified as American exercise, so Black-76 does not capture possible early exercise.
-
-## 8. Are option delta, implied volatility and volatility-surface data available?
+## 7. Are option delta, implied volatility and volatility-surface data available?
 
 Yes, but they are calculated rather than exchange-quoted. The option panel contains Black--76 implied volatility, futures delta, gamma, and vega. The surface file contains 9,690 underlying-expiry-day summaries with ATM, nearest observed 10-delta and 25-delta call/put IVs, risk reversals, and butterflies. Points are nearest observations, not exact interpolated delta quotes.
 
-## 9. What futures price data are available for different contract maturities?
+## 8. What futures price data are available for different contract maturities?
 
 The full panel contains 56,515 daily observations for 188 resolved contracts: 22 CNY/RUB, 92 USD/RUB, and 74 EUR/RUB. Raw and normalized OHLC, settlement, VWAP, the selected analytical price, first/last trading dates, expiration, and remaining maturity are available. `futures_pricing_panel.csv` retains every maturity; `fx_nearby_daily.csv` selects the shortest positive-price non-expired contract for each pair-date.
 
-## 10. Which Russian and Chinese funding rates are available by maturity?
+## 9. Which Russian and Chinese funding rates are available by maturity?
 
 - **RUB:** RUSFAR O/N, 1W, 2W, 1M, and 3M; RUONIA O/N; Bank of Russia key rate.
 - **CNY:** CNY RUSFAR O/N and 1W; Shibor O/N, 1W, 2W, 1M, 3M, 6M, 9M, and 1Y; FR/FDR repo fixings at 1D, 7D, and 14D; LPR 1Y and 5Y; PBOC 7-day reverse-repo rate.
 
 Each wide funding series includes its source observation date and staleness in days.
 
-## 11. What proxy funding rates can be used when direct rates are unavailable?
+## 10. What proxy funding rates can be used when direct rates are unavailable?
 
 For RUB, RUONIA is the main overnight fallback to RUSFAR. For CNY, the closest Shibor tenor is the main fallback to CNY RUSFAR. FR/FDR repo fixings are useful secured-market robustness proxies. The CBR key rate, PBOC reverse-repo rate, and LPR are policy or published-reference proxies and should be kept distinct from marginal market funding.
 
