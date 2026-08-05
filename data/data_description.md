@@ -47,19 +47,7 @@ Each wide funding series includes its source observation date and staleness in d
 
 For RUB, RUONIA is the main overnight fallback to RUSFAR. For CNY, the closest Shibor tenor is the main fallback to CNY RUSFAR. FR/FDR repo fixings are useful secured-market robustness proxies. The CBR key rate, PBOC reverse-repo rate, and LPR are policy or published-reference proxies and should be kept distinct from marginal market funding.
 
-## 12. Are published bank rates or interbank interest rates more appropriate?
-
-For short-dated derivatives pricing, secured or interbank market rates such as RUSFAR, RUONIA, Shibor, and repo fixings are generally more appropriate because they are closer to short-term market funding conditions. LPR and policy rates are better used as background or robustness variables. Neither type measures the exact funding cost faced by a sanctioned or institution-specific trader.
-
-## 13. Does the observed futures premium exceed the theoretical premium?
-
-Not on average in the nearby CNY/RUB series. Since the basis is $100(F-F^*)/F^*$, a positive value means that the observed premium exceeds the cost-of-carry benchmark. Across 1,030 nearby observations, the mean basis is -0.34%, the median is -0.17%, and only 39.8% of observations are positive. The answer varies by date and maturity, but the observed future is more often below than above the benchmark in this sample.
-
-## 14. Is there evidence of arbitrage or a persistent risk premium?
-
-There is evidence of persistent pricing deviations, but not proof of executable arbitrage. The nearby CNY/RUB basis has lag-one autocorrelation of about 0.68 and is negative in about 60% of observations. Persistence is compatible with a risk premium, funding segmentation, capital controls, sanctions, settlement risk, or measurement mismatch. Without executable bid--ask quotes, transaction costs, margin costs, and institution-specific funding access, the data cannot separate these explanations or establish arbitrage profits.
-
-## 15. How did pricing, liquidity, funding rates and volatility change before and after sanctions?
+## 11. How did pricing, liquidity, funding rates and volatility change before and after sanctions?
 
 The strongest descriptive changes are:
 
@@ -70,7 +58,7 @@ The strongest descriptive changes are:
 
 These are short-window descriptive comparisons. They do not isolate sanctions from simultaneous policy, volatility, liquidity, and macroeconomic changes.
 
-## 16. What variables, frequency, units and coverage does each dataset contain?
+## 12. What variables, frequency, units and coverage does each dataset contain?
 
 | Dataset | Frequency and row unit | Main variables and units | Current coverage |
 |---|---|---|---|
